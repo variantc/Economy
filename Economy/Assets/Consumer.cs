@@ -8,6 +8,10 @@ public class Consumer : MonoBehaviour {
     private ResourceType consumedResource = ResourceType.Null;
     private int offerPrice = -1;
     private int stockConsumedProduct = 0;
+    
+
+    // Personal dictionary for the consumer to store the market data of producers
+    Dictionary<Producer, float> producerMarket;
 
     // --------------------------------------------------------------------------------------------------------
     // Accessors
@@ -59,5 +63,21 @@ public class Consumer : MonoBehaviour {
     {
         consumedResource = type;
         consumptionRate = rate;
+        producerMarket = new Dictionary<Producer, float>();
+    }
+
+    public void AddProducerToMarket (Producer prod)
+    {
+        // calculate a score for the producer based on the distance and the price
+        float score = (this.transform.position - prod.transform.position).magnitude * prod.GetAcceptPrice();
+        Debug.Log(score);
+        Debug.Log(prod.GetProducedResource());
+        producerMarket.Add(prod, score);
+    }
+
+    public void DisplayMarket ()
+    {
+        foreach (KeyValuePair<Producer,float> kvp in producerMarket)
+            Debug.Log(kvp.Key + ": Score: " + kvp.Value);
     }
 }
