@@ -6,7 +6,7 @@ public class Consumer : MonoBehaviour {
 
     private int consumptionRate = 0;
     private ResourceType consumedResource = ResourceType.Null;
-    private int offerPrice = -1;
+    private float offerPrice = -1;
     private int stockConsumedProduct = 0;
     
 
@@ -16,6 +16,7 @@ public class Consumer : MonoBehaviour {
     // --------------------------------------------------------------------------------------------------------
     // Accessors
     // --------------------------------------------------------------------------------------------------------
+    // Rate at which the resource is consumed
     public int GetConsumptionRate()
     {
         return consumptionRate;
@@ -25,6 +26,7 @@ public class Consumer : MonoBehaviour {
         consumptionRate = value;
     }
 
+    // Type of resource consumed
     public ResourceType GetConsumedResource()
     {
         if (consumedResource == ResourceType.Null)
@@ -37,15 +39,17 @@ public class Consumer : MonoBehaviour {
         consumedResource = value;
     }
 
-    public int GetOfferPrice()
+    // Price willing to pay
+    public float GetOfferPrice()
     {
         return offerPrice;
     }
-    public void SetOfferPrice(int value)
+    public void SetOfferPrice(float value)
     {
         offerPrice = value;
     }
 
+    // Stock of consumed resource
     public int GetStockConsumedProduct()
     {
         return stockConsumedProduct;
@@ -66,14 +70,30 @@ public class Consumer : MonoBehaviour {
         producerMarket = new Dictionary<Producer, float>();
     }
 
+    // The 'Market' is the store of all relevant (producing the desired resource) producers
     public void AddProducerToMarket (Producer prod)
     {
+        // Check producer prod supplies the correct resource
+        if (prod.GetProducedResource() != this.consumedResource)
+        {
+            Debug.LogError("Trying to add producer of wrong type to market: " + prod.transform.name);
+            return;
+        }
+
         // calculate a score for the producer based on the distance and the price
+        // FIXME: improve score based on average range and price ratios
         float score = (this.transform.position - prod.transform.position).magnitude * prod.GetAcceptPrice();
-        Debug.Log(score);
-        Debug.Log(prod.GetProducedResource());
         producerMarket.Add(prod, score);
     }
+
+    //public void CalculateMarketScores()
+    //{
+    //    foreach (KeyValuePair<Producer, float> kvp in producerMarket)
+    //    {
+    //        float score = (this.transform.position - kvp.Key.transform.position).magnitude * kvp.Key.GetAcceptPrice();
+            
+    //    }
+    //}
 
     public void DisplayMarket ()
     {
