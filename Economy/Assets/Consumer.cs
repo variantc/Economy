@@ -7,7 +7,7 @@ public class Consumer : MonoBehaviour {
     private int consumptionRate = 0;
     private ResourceType consumedResource = ResourceType.Null;
     private float offerPrice = -1;
-    private int stockConsumedProduct = 0;
+    private int consumerStock = 0;
     private float wealth = 100f;
     
 
@@ -53,11 +53,11 @@ public class Consumer : MonoBehaviour {
     // Stock of consumed resource
     public int GetStockConsumedProduct()
     {
-        return stockConsumedProduct;
+        return consumerStock;
     }
     public void SetStockConsumedProduct(int value)
     {
-        stockConsumedProduct = value;
+        consumerStock = value;
     }
 
     // Money available
