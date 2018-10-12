@@ -35,7 +35,7 @@ public class TradeController : MonoBehaviour {
     {
         Producer producer = Instantiate(ProducerPrefab, this.transform.position + spawnPos, Quaternion.identity);
         producer.transform.SetParent(this.transform);
-        producer.SetUpProducer(ResourceType.Wood, 10);
+        producer.SetUpProducer(ResourceType.Wood, 1);
         producer.transform.name = "Producer[" + producer.GetProducedResource() +
                                     ",(" + producer.transform.position.x + "," +
                                     producer.transform.position.y + ")]";
@@ -48,6 +48,8 @@ public class TradeController : MonoBehaviour {
     {
         foreach (Consumer c in consumerList)
         {
+            // Zero each consumer's market
+            c.ClearMarket();
             foreach (Producer p in producerList)
             {
                 // test that a matching produced resource
@@ -63,8 +65,8 @@ public class TradeController : MonoBehaviour {
     private void Update()
     {
         // Inputs
-
-        // Display the marker information
+        
+        // Display the market information
         if (Input.GetKeyDown(KeyCode.D))
         {
             foreach (Consumer c in consumerList)
@@ -76,6 +78,41 @@ public class TradeController : MonoBehaviour {
         {
             UpdateTurn();
         }
+
+        // Choose Producer
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PerformTransactions();
+        }
+    }
+
+    private void PerformTransactions()
+    {
+        // Choose the producer for each consumer
+        foreach (Consumer c in consumerList)
+        {
+            // Get chosen producer
+            Producer buyFrom = c.ChooseProducer();
+            // Calculate the amount to buy from the available money of consumer divided by price
+            //int amountToBuy = (int)(c.GetWealth() / buyFrom.GetAcceptPrice());
+            int amountToBuy = 1;
+
+            // get the total cost (should be less than wealth of consumer) and the amount sold (should be <= amount
+            // available from the producer
+            float cost;
+            int amountSold = c.ChooseProducer().SellResource(amountToBuy, c.GetConsumedResource(), out cost);
+
+            if (cost > c.GetWealth())
+            {
+                Debug.LogError("Not enough money in consumer - Check TradeController.PerformTransactions");
+                buyFrom.Refund(cost);
+                return;
+            }
+
+            // Decrease wealth and increase stock of consumer
+            c.SetWealth(c.GetWealth() - cost);
+            c.SetStockConsumedProduct(c.GetStockConsumedProduct() + amountToBuy);
+        }
     }
 
     void UpdateTurn()
@@ -85,9 +122,7 @@ public class TradeController : MonoBehaviour {
         {
             p.UpdateStock();
         }
-        // Update the markets of the consumers
-        foreach (Consumer c in consumerList)
-        {
-        }
+        // Regenerate the markets of the consumers
+        GenerateConsumerMarkets();
     }
 }

@@ -8,6 +8,7 @@ public class Consumer : MonoBehaviour {
     private ResourceType consumedResource = ResourceType.Null;
     private float offerPrice = -1;
     private int stockConsumedProduct = 0;
+    private float wealth = 100f;
     
 
     // Personal dictionary for the consumer to store the market data of producers
@@ -59,6 +60,9 @@ public class Consumer : MonoBehaviour {
         stockConsumedProduct = value;
     }
 
+    // Money available
+    public float GetWealth() { return wealth; }
+    public void SetWealth(float value) { wealth = value; }
 
     // --------------------------------------------------------------------------------------------------------
     // Setup the instance
@@ -86,18 +90,38 @@ public class Consumer : MonoBehaviour {
         producerMarket.Add(prod, score);
     }
 
-    //public void CalculateMarketScores()
-    //{
-    //    foreach (KeyValuePair<Producer, float> kvp in producerMarket)
-    //    {
-    //        float score = (this.transform.position - kvp.Key.transform.position).magnitude * kvp.Key.GetAcceptPrice();
-            
-    //    }
-    //}
-
     public void DisplayMarket ()
     {
         foreach (KeyValuePair<Producer,float> kvp in producerMarket)
-            Debug.Log(kvp.Key + ": Score: " + kvp.Value);
+        {
+            Debug.Log(kvp.Key + ": Score: " + kvp.Value + 
+                "  Price: " + kvp.Key.GetAcceptPrice() + 
+                "  Stock: " + kvp.Key.GetStockProducedProduct());
+        }
+    }
+
+    public void ClearMarket ()
+    {
+        producerMarket.Clear();
+    }
+
+    public Producer ChooseProducer ()
+    {
+        float minScore = -1;
+        Producer chosenProducer = null;
+
+        foreach (KeyValuePair<Producer, float> kvp in producerMarket)
+        {
+            if (minScore < 0 || minScore > kvp.Value)
+            {
+                minScore = kvp.Value;
+                chosenProducer = kvp.Key;
+            }
+        }
+        
+        if (chosenProducer == null)
+            Debug.LogError("Consumer.ChooseProducer: chosenProducer is null, no min score found");
+
+        return chosenProducer;
     }
 }
