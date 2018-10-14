@@ -10,7 +10,6 @@ public class Consumer : MonoBehaviour {
     private int consumerStock = 0;
     private float wealth = 100f;
     
-
     // Personal dictionary for the consumer to store the market data of producers
     Dictionary<Producer, float> producerMarket;
 

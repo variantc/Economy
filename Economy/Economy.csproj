@@ -237,6 +237,7 @@
     <Compile Include="Assets\Body.cs" />
     <Compile Include="Assets\Consumer.cs" />
     <Compile Include="Assets\Job.cs" />
+    <Compile Include="Assets\Manufacturer.cs" />
     <Compile Include="Assets\Producer.cs" />
     <Compile Include="Assets\Resource.cs" />
     <Compile Include="Assets\TradeController.cs" />
