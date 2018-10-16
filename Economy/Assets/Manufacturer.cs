@@ -6,16 +6,18 @@ public class Manufacturer : MonoBehaviour {
     // This class needs to convert one resource type to another
     // Thus should have a Consumer (input) and Producer (output)
 
-    public Consumer consumerPrefab;
-    public Producer producerPrefab;
+    TradeController tradeController;
 
     Consumer input;
     Producer output;
 
     private void Start()
     {
-        input = Instantiate(consumerPrefab, this.transform);
-        output = Instantiate(producerPrefab, this.transform);
+        // tradeController must already be instantiated
+        tradeController = FindObjectOfType<TradeController>();
+
+        input = Instantiate(tradeController.consumerPrefab, this.transform);
+        output = Instantiate(tradeController.producerPrefab, this.transform);
     }
 
     public void SetUpManufacturer(ResourceType rawMaterial, ResourceType producedMaterial, int rawRequired, int producedAmount)

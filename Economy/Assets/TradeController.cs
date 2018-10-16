@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class TradeController : MonoBehaviour {
 
-    public Consumer ConsumerPrefab;
-    public Producer ProducerPrefab;
+    public Consumer consumerPrefab;
+    public Producer producerPrefab;
 
     public List<Consumer> consumerList;
     public List<Producer> producerList;
 
-    // Use this for initialization
+    // Use this for initialization 
     void Start ()
     {
-        Consumer consumer = Instantiate(ConsumerPrefab, this.transform.position + new Vector3(0f, 0f, 0f), Quaternion.identity);
+        Consumer consumer = Instantiate(consumerPrefab, this.transform.position + new Vector3(0f, 0f, 0f), Quaternion.identity);
         consumer.transform.SetParent(this.transform);
         consumer.SetUpConsumer(ResourceType.Wood, 5);
         consumerList.Add(consumer);
@@ -33,7 +33,7 @@ public class TradeController : MonoBehaviour {
     // For now, have wood, with a spawn rate of '10'
     void SpawnProducer (Vector3 spawnPos)
     {
-        Producer producer = Instantiate(ProducerPrefab, this.transform.position + spawnPos, Quaternion.identity);
+        Producer producer = Instantiate(producerPrefab, this.transform.position + spawnPos, Quaternion.identity);
         producer.transform.SetParent(this.transform);
         producer.SetUpProducer(ResourceType.Wood, 1);
         producer.transform.name = "Producer[" + producer.GetProducedResource() +
