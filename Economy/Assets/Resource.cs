@@ -2,20 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ResourceType { Null, Food, Wood, Tool }
+public enum ResourceType { Null = 0, Food = 1, Wood = 2, Tool = 3 }
 
-public class NewBehaviourScript : MonoBehaviour {
-
-
-    ResourceType type = ResourceType.Null;
-
-    public void SetResourceType (ResourceType type)
-    {
-        this.type = type;
-    }
-
-    public ResourceType GetResourceType ()
-    {
-        return this.type;
-    }
+public class Resource : MonoBehaviour {
 }
