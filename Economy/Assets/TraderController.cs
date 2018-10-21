@@ -1,12 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TraderController : MonoBehaviour {
 
     public Trader traderPrefab;
     public List<Trader> traderList;
     float spawnRange = 3f;
+
+    // TEMPORARY!
+    public Text debugText;
+    private void FixedUpdate()
+    {
+        if (traderList.ToArray().Length > 0)
+            debugText.text = "Trader Stock: " + traderList[0].traderStock.ToString();
+    }
 
     public void UpdateTraders ()
     {

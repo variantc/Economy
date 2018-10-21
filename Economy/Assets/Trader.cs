@@ -122,7 +122,7 @@ public class Trader : MonoBehaviour {
             }
             else
             {
-                Debug.LogError("Trader.MoveTowardsNode :: Some shit has gone wrong in this function to do with carried and destination input resources");
+                Debug.LogError("Trader.MoveTowardsNode :: Something has gone wrong in this function to do with carried and destination input resources");
             }
 
             carriedResource = destinationNode.outputResource;

@@ -22,6 +22,8 @@ public class Node : MonoBehaviour {
     public bool NODE_SET = false;
     public bool INPUT_MET = false;
 
+    SpriteRenderer sr;
+
     private void Start()
     {
         nodeController = FindObjectOfType<NodeController>();
@@ -37,6 +39,27 @@ public class Node : MonoBehaviour {
         NODE_SET = true;
 
         this.transform.position = pos;
+
+        // Set colour based upon the resource type OUTPUT
+        sr = GetComponentInChildren<SpriteRenderer>();
+        switch (output)
+        {
+            case ResourceType.Null:
+                sr.color = Color.black;
+                break;
+            case ResourceType.Wood:
+                sr.color = Color.green;
+                break;
+            case ResourceType.Tool:
+                sr.color = Color.grey;
+                break;
+            case ResourceType.Food:
+                sr.color = Color.cyan;
+                break;
+            default:
+                sr.color = Color.white;
+                break;
+        }
     }
 
     public void Process()
