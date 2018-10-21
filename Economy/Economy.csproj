@@ -243,6 +243,8 @@
     <Compile Include="Assets\Producer.cs" />
     <Compile Include="Assets\Resource.cs" />
     <Compile Include="Assets\TradeController.cs" />
+    <Compile Include="Assets\Trader.cs" />
+    <Compile Include="Assets\TraderController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

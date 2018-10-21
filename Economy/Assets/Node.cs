@@ -79,13 +79,13 @@ public class Node : MonoBehaviour {
             Debug.LogError("Node.OutputResource :: Incorrect input resource");
 
         if (outputStock <= 0)
-            Debug.LogError("Node.OutputResource :: Not enough resources in stock to satisfy request");
+            Debug.Log("Node.OutputResource :: Not enough resources in stock to satisfy request");
 
         if (outputStock < requestedAmount)
         {
             outputAmount = outputStock;
             outputStock = 0;
-            Debug.LogError("Node.InputResource :: Not enough resources to fully satisfy output request: Only " + outputAmount + " units outputted");
+            Debug.Log("Node.InputResource :: Not enough resources to fully satisfy output request: Only " + outputAmount + " units outputted");
         }
 
         if (outputStock >= requestedAmount)
@@ -94,7 +94,7 @@ public class Node : MonoBehaviour {
             outputAmount = requestedAmount;
         }
 
-        return requestedAmount;
+        return outputAmount;
     }
 
     public int InputResourceToNode (ResourceType suppliedResource, int suppliedAmount)
