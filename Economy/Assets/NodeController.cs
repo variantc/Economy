@@ -30,6 +30,10 @@ public class NodeController : MonoBehaviour {
                 outputResource = ResourceType.Food;
                 inputResource = ResourceType.Tool;
                 break;
+            case "Null":
+                outputResource = ResourceType.Null;
+                inputResource = ResourceType.Food;
+                break;
             default:
                 outputResource = ResourceType.Null;
                 inputResource = ResourceType.Null;

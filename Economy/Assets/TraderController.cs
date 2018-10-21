@@ -25,5 +25,7 @@ public class TraderController : MonoBehaviour {
         traderList.Add(newTrader);
         newTrader.transform.SetParent(this.transform);
         newTrader.transform.name = "Trader " + (traderList.ToArray().Length - 1);
+        // setting each trader to have a random resource type which it head towards first
+        newTrader.SetRandomResource();
     }
 }

@@ -9,6 +9,10 @@ public class Trader : MonoBehaviour {
     public NodeController nodeController;
 
     public ResourceType carriedResource = ResourceType.Null;
+    public void SetCarriedResource (ResourceType resource)
+    {
+        carriedResource = resource;
+    }
 
     public float travelSpeed = 0.5f;
     public int traderStock = 0;
@@ -33,14 +37,37 @@ public class Trader : MonoBehaviour {
 
     public void DetermineDestination ()
     {
-        // if have no resource, choose the closest node which does not have an empty stock
-        if (SELLING == false)
-        {
-            // distance to node variable, arbitrarily large
-            float dist = 100f;
-            ARRIVED = false;
+        //// if have no resource, choose a random resource and go to the closest node which does not have an empty stock
+        //if (SELLING == false)
+        //{
+        //    // distance to node variable, arbitrarily large
+        //    float dist = 100f;
+        //    ARRIVED = false;
 
-            foreach (Node n in nodeController.nodeList)
+        //    foreach (Node n in nodeController.nodeList)
+        //    {
+        //        float nodeDist = (this.transform.position - n.transform.position).magnitude;
+
+        //        if (nodeDist < dist)
+        //        {
+        //            destinationNode = n;
+        //            dist = nodeDist;
+        //        }
+        //    }
+
+        //    if (destinationNode == null)
+        //    {
+        //        Debug.LogError("Trader.DetermineDestination :: algorithm failed; destinationNode not found");
+        //    }
+        //}
+        //else
+        //{
+        float dist = 100f;
+        ARRIVED = false;
+
+        foreach (Node n in nodeController.nodeList)
+        {
+            if (n.inputResource == carriedResource)
             {
                 float nodeDist = (this.transform.position - n.transform.position).magnitude;
 
@@ -50,36 +77,15 @@ public class Trader : MonoBehaviour {
                     dist = nodeDist;
                 }
             }
-
-            if (destinationNode == null)
-            {
-                Debug.LogError("Trader.DetermineDestination :: algorithm failed; destinationNode not found");
-            }
         }
-        else
+
+        if (destinationNode == null)
         {
-            float dist = 100f;
-            ARRIVED = false;
-
-            foreach (Node n in nodeController.nodeList)
-            {
-                if (n.inputResource == carriedResource)
-                {
-                    float nodeDist = (this.transform.position - n.transform.position).magnitude;
-
-                    if (nodeDist < dist)
-                    {
-                        destinationNode = n;
-                        dist = nodeDist;
-                    }
-                }
-            }
-
-            if (destinationNode == null)
-            {
-                Debug.LogError("Trader.DetermineDestination :: no node available accepting ResourceType." + carriedResource);
-            }
+            Debug.LogError("Trader.DetermineDestination :: no node available accepting ResourceType." + carriedResource);
+            FindLargestStock();
+            //SetRandomResource();
         }
+        //}
     }
 
     public void MoveTowardsNode ()
@@ -100,6 +106,25 @@ public class Trader : MonoBehaviour {
 
         if (ARRIVED == true)
         {
+            // if there are no resources available to pick up here, pick another randomly
+            if (destinationNode.outputStock == 0)
+            {
+                SetRandomResource();
+                ARRIVED = false;
+                SELLING = false;
+            }
+
+            // deliver and take from destinationNode
+            if (carriedResource == destinationNode.inputResource)
+            {
+                int acceptedAmount = destinationNode.InputResourceToNode(carriedResource, this.traderStock);
+                this.traderStock -= acceptedAmount;
+            }
+            else
+            {
+                Debug.LogError("Trader.MoveTowardsNode :: Some shit has gone wrong in this function to do with carried and destination input resources");
+            }
+
             carriedResource = destinationNode.outputResource;
             traderStock += destinationNode.OutputResourceFromNode(carriedResource, traderStockMax - traderStock);
             SELLING = true;
@@ -110,5 +135,21 @@ public class Trader : MonoBehaviour {
     public void ReportDestination ()
     {
         Debug.Log(this.transform.name + " heading to: " + destinationNode.transform.position);
+    }
+
+    public void SetRandomResource ()
+    {
+        ResourceType resourceType = (ResourceType)Random.Range(0, 4);
+        this.SetCarriedResource(resourceType);
+    }
+
+    public void FindLargestStock()
+    {
+        int highestStock = 0;
+        foreach(Node n in nodeController.nodeList)
+        {
+            if (n.outputStock > highestStock)
+                destinationNode = n;
+        }
     }
 }
