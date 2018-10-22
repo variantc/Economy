@@ -144,28 +144,4 @@ public class Node : MonoBehaviour {
         // return the accepted amount for the caller of the function to use
         return acceptedAmount;
     }
-
-    //void Process ()
-    //{
-    //    if (NODE_SET == false)
-    //    {
-    //        Debug.LogError("Node.Process :: Node not yet setup");
-    //        outNum = 0;
-    //        return ResourceType.Null;
-    //    }
-    //    if (input != inputResource)
-    //    {
-    //        Debug.LogError("Node.Process :: Incorrect input resource");
-    //        outNum = 0;
-    //        return ResourceType.Null;
-    //    }
-    //    if (inNum < inputNum)
-    //    {
-    //        Debug.LogError("Node.Process :: Not enough input resources to perform process");
-    //        outNum = 0;
-    //        return ResourceType.Null;
-    //    }
-    //    outNum = outputNum;
-    //    return outputResource;
-    //}
 }

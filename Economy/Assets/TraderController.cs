@@ -9,7 +9,7 @@ public class TraderController : MonoBehaviour {
     public List<Trader> traderList;
     float spawnRange = 3f;
 
-    // TEMPORARY!
+    // TEMPORARY! - for displaying the trader stock
     public Text debugText;
     private void FixedUpdate()
     {
@@ -17,6 +17,7 @@ public class TraderController : MonoBehaviour {
             debugText.text = "Trader Stock: " + traderList[0].traderStock.ToString();
     }
 
+    // At the moment this is called upon pressing the ProcessNodes button
     public void UpdateTraders ()
     {
         foreach (Trader t in traderList)
