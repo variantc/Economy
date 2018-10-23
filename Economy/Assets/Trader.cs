@@ -37,31 +37,8 @@ public class Trader : MonoBehaviour {
 
     public void DetermineDestination ()
     {
-        //// if have no resource, choose a random resource and go to the closest node which does not have an empty stock
-        //if (SELLING == false)
-        //{
-        //    // distance to node variable, arbitrarily large
-        //    float dist = 100f;
-        //    ARRIVED = false;
-
-        //    foreach (Node n in nodeController.nodeList)
-        //    {
-        //        float nodeDist = (this.transform.position - n.transform.position).magnitude;
-
-        //        if (nodeDist < dist)
-        //        {
-        //            destinationNode = n;
-        //            dist = nodeDist;
-        //        }
-        //    }
-
-        //    if (destinationNode == null)
-        //    {
-        //        Debug.LogError("Trader.DetermineDestination :: algorithm failed; destinationNode not found");
-        //    }
-        //}
-        //else
-        //{
+        // if have no resource, choose a random resource and go to the closest node which does not have an empty stock
+        // start with arbitrarily large distance to calculate closest
         float dist = 100f;
         ARRIVED = false;
 
@@ -85,7 +62,6 @@ public class Trader : MonoBehaviour {
             FindLargestStock();
             //SetRandomResource();
         }
-        //}
     }
 
     public void MoveTowardsNode ()
@@ -113,6 +89,8 @@ public class Trader : MonoBehaviour {
                 ARRIVED = false;
                 SELLING = false;
             }
+
+            Debug.Log(destinationNode.inputResource + " " + carriedResource);
 
             // deliver and take from destinationNode
             if (carriedResource == destinationNode.inputResource)
