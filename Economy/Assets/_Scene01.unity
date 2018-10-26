@@ -582,6 +582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89651ce625ba6aa498ebd399274f6af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nodeController: {fileID: 372229189}
   resourcePrefab: {fileID: 114518065282840330, guid: 271235c5678552d48a14ca95b55c88ca,
     type: 2}
   resourceList: []

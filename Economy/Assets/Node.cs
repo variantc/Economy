@@ -86,6 +86,17 @@ public class Node : MonoBehaviour {
         inputStock -= inputNum;
         outputStock += outputNum;
 
+        // -------------------------------------------------------------------------------------------------------------------------
+        // Addition for spawning the resource objects
+        // -------------------------------------------------------------------------------------------------------------------------
+
+        // Instantiate resource and set type to output type, also set as child of resourceController transform
+        Resource resource = Instantiate(nodeController.resourceController.resourcePrefab, this.transform.position, Quaternion.identity);
+        resource.transform.SetParent(nodeController.resourceController.transform);
+        resource.resourceType = outputResource;
+
+        // -------------------------------------------------------------------------------------------------------------------------
+
         // Finally limit the stock to output resource max:
         if (outputStock > outputMaxStock)
         {

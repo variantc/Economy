@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResourceController : MonoBehaviour
 {
-
+    public NodeController nodeController;
     public Resource resourcePrefab;
     public List<Resource> resourceList;
     float spawnRange = 3f;
@@ -33,6 +33,6 @@ public class ResourceController : MonoBehaviour
         Resource newResource = Instantiate(resourcePrefab, spawnPos, Quaternion.identity);
         resourceList.Add(resourcePrefab);
         newResource.transform.SetParent(this.transform);
-        newResource.transform.name = "Resource " + newResource.ResourceType;
+        newResource.transform.name = "Resource " + newResource.resourceType;
     }
 }

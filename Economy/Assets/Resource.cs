@@ -5,22 +5,22 @@ using UnityEngine;
 public enum ResourceType { Null = 0, Food = 1, Wood = 2, Tool = 3 }
 
 public class Resource : MonoBehaviour {
-    ResourceType _resourceType;
+    public ResourceType resourceType;
 
-    public ResourceType ResourceType
-    {
-        get
-        {
-            return _resourceType;
-        }
+    //public ResourceType ResourceType;
+    //{
+    //    get
+    //    {
+    //        return _resourceType;
+    //    }
 
-        set
-        {
-            _resourceType = value;
-        }
-    }
+    //    set
+    //    {
+    //        _resourceType = value;
+    //    }
+    //}
 
-    public NodeController nodeController;
+    public ResourceController resourceController;
 
     public float travelSpeed = 0.25f;
 
@@ -32,6 +32,11 @@ public class Resource : MonoBehaviour {
 
     public bool ARRIVED = false;
 
+    private void Start()
+    {
+        resourceController = FindObjectOfType<ResourceController>();
+    }
+
     public void DetermineDestination()
     {
         // if have no resource, choose a random resource and go to the closest node which does not have an empty stock
@@ -39,9 +44,9 @@ public class Resource : MonoBehaviour {
         float dist = 100f;
         ARRIVED = false;
 
-        foreach (Node n in nodeController.nodeList)
+        foreach (Node n in resourceController.nodeController.nodeList)
         {
-            if (n.inputResource == _resourceType)
+            if (n.inputResource == resourceType)
             {
                 float nodeDist = (this.transform.position - n.transform.position).magnitude;
 
@@ -55,7 +60,7 @@ public class Resource : MonoBehaviour {
 
         if (destinationNode == null)
         {
-            Debug.LogError("Resource.DetermineDestination :: no node available accepting ResourceType." + _resourceType);
+            Debug.LogError("Resource.DetermineDestination :: no node available accepting ResourceType." + resourceType);
             FindLargestStock();
             //SetRandomResource();
         }
@@ -79,12 +84,12 @@ public class Resource : MonoBehaviour {
 
         if (ARRIVED == true)
         {
-            Debug.Log(destinationNode.inputResource + " " + _resourceType);
+            Debug.Log(destinationNode.inputResource + " " + resourceType);
 
             // deliver and take from destinationNode
-            if (_resourceType == destinationNode.inputResource)
+            if (resourceType == destinationNode.inputResource)
             {
-                int acceptedAmount = destinationNode.InputResourceToNode(_resourceType, 1);
+                int acceptedAmount = destinationNode.InputResourceToNode(resourceType, 1);
                 Destroy(this.gameObject);
             }
             else
@@ -97,7 +102,7 @@ public class Resource : MonoBehaviour {
     public void FindLargestStock()
     {
         int highestStock = 0;
-        foreach (Node n in nodeController.nodeList)
+        foreach (Node n in resourceController.nodeController.nodeList)
         {
             if (n.outputStock > highestStock)
                 destinationNode = n;
