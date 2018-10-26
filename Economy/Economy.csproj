@@ -242,6 +242,7 @@
     <Compile Include="Assets\NodeController.cs" />
     <Compile Include="Assets\Producer.cs" />
     <Compile Include="Assets\Resource.cs" />
+    <Compile Include="Assets\ResourceController.cs" />
     <Compile Include="Assets\TradeController.cs" />
     <Compile Include="Assets\Trader.cs" />
     <Compile Include="Assets\TraderController.cs" />

@@ -5,4 +5,102 @@ using UnityEngine;
 public enum ResourceType { Null = 0, Food = 1, Wood = 2, Tool = 3 }
 
 public class Resource : MonoBehaviour {
+    ResourceType _resourceType;
+
+    public ResourceType ResourceType
+    {
+        get
+        {
+            return _resourceType;
+        }
+
+        set
+        {
+            _resourceType = value;
+        }
+    }
+
+    public NodeController nodeController;
+
+    public float travelSpeed = 0.25f;
+
+    public Node destinationNode = null;
+    //public void SetDestinationNode(Node destination)
+    //{
+    //    destinationNode = destination;
+    //}
+
+    public bool ARRIVED = false;
+
+    public void DetermineDestination()
+    {
+        // if have no resource, choose a random resource and go to the closest node which does not have an empty stock
+        // start with arbitrarily large distance to calculate closest
+        float dist = 100f;
+        ARRIVED = false;
+
+        foreach (Node n in nodeController.nodeList)
+        {
+            if (n.inputResource == _resourceType)
+            {
+                float nodeDist = (this.transform.position - n.transform.position).magnitude;
+
+                if (nodeDist < dist)
+                {
+                    destinationNode = n;
+                    dist = nodeDist;
+                }
+            }
+        }
+
+        if (destinationNode == null)
+        {
+            Debug.LogError("Resource.DetermineDestination :: no node available accepting ResourceType." + _resourceType);
+            FindLargestStock();
+            //SetRandomResource();
+        }
+    }
+
+    public void MoveTowardsNode()
+    {
+        Vector3 dirVector = (destinationNode.transform.position - this.transform.position);
+        // copy the direction vector and then normalise
+        Vector3 dirVectorUnit = dirVector;
+        dirVectorUnit.Normalize();
+
+        // check trader doesn't overshoot the destinationNode
+        if ((travelSpeed * dirVectorUnit).magnitude >= dirVector.magnitude)
+            this.transform.position = destinationNode.transform.position;
+        else
+            this.transform.position += travelSpeed * dirVectorUnit;
+
+        if (this.transform.position == destinationNode.transform.position)
+            ARRIVED = true;
+
+        if (ARRIVED == true)
+        {
+            Debug.Log(destinationNode.inputResource + " " + _resourceType);
+
+            // deliver and take from destinationNode
+            if (_resourceType == destinationNode.inputResource)
+            {
+                int acceptedAmount = destinationNode.InputResourceToNode(_resourceType, 1);
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                Debug.LogError("Resource.MoveTowardsNode :: Something has gone wrong in this function to do with carried and destination input resources");
+            }
+        }
+    }
+
+    public void FindLargestStock()
+    {
+        int highestStock = 0;
+        foreach (Node n in nodeController.nodeList)
+        {
+            if (n.outputStock > highestStock)
+                destinationNode = n;
+        }
+    }
 }

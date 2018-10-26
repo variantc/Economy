@@ -5,6 +5,7 @@ using UnityEngine;
 public class NodeController : MonoBehaviour {
 
     public Node nodePrefab;
+    public ResourceController resourceController;
 
     public List<Node> nodeList;
 
