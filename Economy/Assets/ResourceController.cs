@@ -9,16 +9,14 @@ public class ResourceController : MonoBehaviour
     public List<Resource> resourceList;
     float spawnRange = 3f;
 
-    // TEMPORARY! - for displaying the trader stock
-    //public Text debugText;
-    //private void FixedUpdate()
-    //{
-    //    if (resourceList.ToArray().Length > 0)
-    //        debugText.text = "Trader Stock: " + resourceList[0].traderStock.ToString();
-    //}
+
+    private void Start()
+    {
+        nodeController = FindObjectOfType<NodeController>();
+    }
 
     // At the moment this is called upon pressing the ProcessNodes button
-    public void UpdateTraders()
+    public void UpdateResources()
     {
         foreach (Resource r in resourceList)
         {
@@ -34,5 +32,14 @@ public class ResourceController : MonoBehaviour
         resourceList.Add(resourcePrefab);
         newResource.transform.SetParent(this.transform);
         newResource.transform.name = "Resource " + newResource.resourceType;
+    }
+
+    public void SpawnResourceFromNode(Node n)
+    {
+        // Instantiate resource and set type to output type, also set as child of resourceController transform
+        Resource resource = Instantiate(resourcePrefab, n.transform.position, Quaternion.identity);
+        resource.transform.SetParent(this.transform);
+        resource.resourceType = n.outputResource;
+        resourceList.Add(resource);
     }
 }

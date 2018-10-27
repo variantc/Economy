@@ -6,29 +6,12 @@ public enum ResourceType { Null = 0, Food = 1, Wood = 2, Tool = 3 }
 
 public class Resource : MonoBehaviour {
     public ResourceType resourceType;
-
-    //public ResourceType ResourceType;
-    //{
-    //    get
-    //    {
-    //        return _resourceType;
-    //    }
-
-    //    set
-    //    {
-    //        _resourceType = value;
-    //    }
-    //}
-
+    
     public ResourceController resourceController;
 
     public float travelSpeed = 0.25f;
 
     public Node destinationNode = null;
-    //public void SetDestinationNode(Node destination)
-    //{
-    //    destinationNode = destination;
-    //}
 
     public bool ARRIVED = false;
 
@@ -44,6 +27,16 @@ public class Resource : MonoBehaviour {
         float dist = 100f;
         ARRIVED = false;
 
+        if (resourceController.nodeController.nodeList == null)
+            Debug.LogError("what??");
+        else
+            Debug.LogError("huh?");
+
+        if (resourceController.nodeController.nodeList.ToArray().Length <= 0)
+        {
+            Debug.LogError("Resource.DetermineDestination :: nodeList has no entries yet");
+            return;
+        }
         foreach (Node n in resourceController.nodeController.nodeList)
         {
             if (n.inputResource == resourceType)
@@ -64,10 +57,13 @@ public class Resource : MonoBehaviour {
             FindLargestStock();
             //SetRandomResource();
         }
+
+        Debug.Log("Resourse.DetermineDestination :: Chosen destination node: " + destinationNode);
     }
 
     public void MoveTowardsNode()
     {
+        Debug.Log(destinationNode);
         Vector3 dirVector = (destinationNode.transform.position - this.transform.position);
         // copy the direction vector and then normalise
         Vector3 dirVectorUnit = dirVector;
@@ -86,10 +82,12 @@ public class Resource : MonoBehaviour {
         {
             Debug.Log(destinationNode.inputResource + " " + resourceType);
 
-            // deliver and take from destinationNode
+            // We need to check that the node 'wants' this resource
+            // then destroy AND remove from resourceController's resourceList
             if (resourceType == destinationNode.inputResource)
             {
                 int acceptedAmount = destinationNode.InputResourceToNode(resourceType, 1);
+                resourceController.resourceList.Remove(this);
                 Destroy(this.gameObject);
             }
             else

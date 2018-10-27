@@ -63,6 +63,7 @@ public class NodeController : MonoBehaviour {
     // Tells each node to perform the processing
     public void ProcessNodes()
     {
+        Debug.Log(nodeList.ToArray().Length);
         foreach (Node n in nodeList)
         {
             n.Process();
